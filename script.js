@@ -3,6 +3,7 @@ const dots = Array.from(document.querySelectorAll(".progress-dot"));
 const pageCount = document.querySelector(".page-count span");
 const timeline = document.querySelector(".timeline span");
 const countNode = document.querySelector(".metric-number");
+const cascadeTextNodes = Array.from(document.querySelectorAll(".hero-title span:first-child, .section-title"));
 
 if ("scrollRestoration" in window.history) {
   window.history.scrollRestoration = "manual";
@@ -74,6 +75,50 @@ function stepTo(index) {
   }, 900);
 }
 
+function mountTextCascade() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  cascadeTextNodes.forEach((node) => {
+    const text = node.textContent;
+    if (!text || node.dataset.cascadeReady === "true") return;
+
+    node.dataset.cascadeReady = "true";
+    node.classList.add("TextCascade");
+    node.setAttribute("aria-label", text.trim());
+    node.textContent = "";
+
+    let charIndex = 0;
+
+    text.split(/(\s+)/).forEach((part) => {
+      if (!part) return;
+
+      if (/^\s+$/.test(part)) {
+        const space = document.createElement("span");
+        space.className = "cascade-space";
+        space.textContent = " ";
+        space.setAttribute("aria-hidden", "true");
+        node.appendChild(space);
+        return;
+      }
+
+      const word = document.createElement("span");
+      word.className = "cascade-word";
+      word.setAttribute("aria-hidden", "true");
+
+      Array.from(part).forEach((char) => {
+        const span = document.createElement("span");
+        span.className = "char";
+        span.style.setProperty("--char-index", String(Math.min(charIndex, 42)));
+        span.textContent = char;
+        word.appendChild(span);
+        charIndex += 1;
+      });
+
+      node.appendChild(word);
+    });
+  });
+}
+
 const observer = new IntersectionObserver(
   (entries) => {
     const visible = entries
@@ -89,6 +134,7 @@ const observer = new IntersectionObserver(
 );
 
 sections.forEach((section) => observer.observe(section));
+mountTextCascade();
 
 dots.forEach((dot) => {
   dot.addEventListener("click", () => goTo(Number(dot.dataset.target)));

@@ -290,13 +290,7 @@ button {
 }
 
 .global-glow {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50vw;
-  width: 34vw;
-  transform: translateX(-50%);
-  background: radial-gradient(ellipse at 50% 50%, rgba(190, 83, 28, 0.055), transparent 66%);
+  display: none;
 }
 
 .brand-mark {
@@ -522,6 +516,52 @@ body.light-ui .timeline {
 
 .PresentationSection.active .MotionTypography:nth-child(4) {
   transition-delay: 320ms;
+}
+
+.TextCascade {
+  --cascade-step: 18ms;
+}
+
+.TextCascade .cascade-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.TextCascade .cascade-space {
+  display: inline;
+  white-space: normal;
+}
+
+.TextCascade .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translate3d(-2px, 8px, 0) scale(0.96);
+  filter: blur(8px);
+  will-change: opacity, transform, filter;
+}
+
+.PresentationSection.active .TextCascade .char {
+  animation: textCascadeIn 780ms var(--ease-premium) forwards;
+  animation-delay: calc(180ms + var(--char-index) * var(--cascade-step));
+}
+
+@keyframes textCascadeIn {
+  0% {
+    opacity: 0;
+    transform: translate3d(-2px, 8px, 0) scale(0.96);
+    filter: blur(8px);
+  }
+
+  62% {
+    opacity: 0.82;
+    filter: blur(1.5px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
 }
 
 .hero-content {
@@ -1521,5 +1561,11 @@ body.light-ui .timeline {
     opacity: 1;
     transform: none;
     clip-path: none;
+  }
+
+  .TextCascade .char {
+    opacity: 1;
+    transform: none;
+    filter: none;
   }
 }
