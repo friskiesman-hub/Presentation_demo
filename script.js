@@ -3,6 +3,9 @@ const dots = Array.from(document.querySelectorAll(".progress-dot"));
 const pageCount = document.querySelector(".page-count span");
 const timeline = document.querySelector(".timeline span");
 const countNode = document.querySelector(".metric-number");
+const loaderClock = document.querySelector("#loader-clock");
+const loaderDate = document.querySelector(".loader-date");
+const loaderTime = document.querySelector(".loader-time");
 const cascadeTextNodes = Array.from(document.querySelectorAll(".hero-title span:first-child, .section-title"));
 
 if ("scrollRestoration" in window.history) {
@@ -18,6 +21,37 @@ let currentIndex = 0;
 let countAnimated = false;
 let wheelLocked = false;
 let touchStartY = 0;
+let loaderDismissed = false;
+let loaderTransitioning = false;
+const loaderLineDelay = 320;
+const loaderLineDuration = 2200;
+const loaderLineCycleStart = performance.now() + loaderLineDelay;
+let loaderClockTimer = null;
+
+function updateLoaderClock() {
+  if (!loaderClock) return;
+
+  const now = new Date();
+  const date = new Intl.DateTimeFormat("ru-RU", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(now);
+  const time = new Intl.DateTimeFormat("ru-RU", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  }).format(now);
+
+  if (loaderDate) loaderDate.textContent = date;
+  if (loaderTime) loaderTime.textContent = time;
+  loaderClock.setAttribute("datetime", now.toISOString());
+}
+
+updateLoaderClock();
+if (loaderClock) {
+  loaderClockTimer = window.setInterval(updateLoaderClock, 1000);
+}
 
 function padPage(value) {
   return String(value + 1).padStart(2, "0");
@@ -53,7 +87,9 @@ function setActive(index) {
   });
 
   pageCount.textContent = padPage(index);
-  timeline.style.width = `${((index + 1) / sections.length) * 100}%`;
+  if (!document.body.classList.contains("is-loading")) {
+    timeline.style.width = `${((index + 1) / sections.length) * 100}%`;
+  }
   document.body.classList.toggle("light-ui", index === 1);
 
   if (index === 3) {
@@ -136,6 +172,50 @@ const observer = new IntersectionObserver(
 sections.forEach((section) => observer.observe(section));
 mountTextCascade();
 
+function finishLoader() {
+  if (loaderDismissed || loaderTransitioning || !document.body.classList.contains("is-loading")) return;
+  loaderTransitioning = true;
+  loaderDismissed = true;
+
+  const elapsed = performance.now() - loaderLineCycleStart;
+  const normalized = elapsed < 0 ? elapsed : elapsed % loaderLineDuration;
+  const waitForEmptyLine =
+    elapsed < 0 ? Math.abs(elapsed) + loaderLineDuration : loaderLineDuration - normalized;
+
+  window.setTimeout(() => {
+    document.body.classList.add("loader-idle");
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        document.body.classList.add("loader-expanding");
+
+        window.setTimeout(() => {
+          if (timeline) timeline.style.width = "0%";
+          document.body.classList.add("loader-dismissing");
+
+          window.setTimeout(() => {
+            document.body.classList.add("loader-done");
+            document.body.classList.remove("is-loading");
+            document.body.classList.remove("loader-idle");
+            document.body.classList.remove("loader-expanding");
+            document.body.classList.remove("loader-dismissing");
+            loaderTransitioning = false;
+            if (loaderClockTimer) window.clearInterval(loaderClockTimer);
+
+            window.setTimeout(() => {
+              setActive(0);
+            }, 260);
+          }, 980);
+        }, 1520);
+      });
+    });
+  }, Math.max(0, waitForEmptyLine));
+}
+
+function isLoaderActive() {
+  return document.body.classList.contains("is-loading");
+}
+
 dots.forEach((dot) => {
   dot.addEventListener("click", () => goTo(Number(dot.dataset.target)));
 });
@@ -147,7 +227,12 @@ document.querySelectorAll("[data-target]").forEach((button) => {
 window.addEventListener(
   "wheel",
   (event) => {
-    if (Math.abs(event.deltaY) < 18) return;
+    if (Math.max(Math.abs(event.deltaY), Math.abs(event.deltaX)) < 18) return;
+    if (isLoaderActive()) {
+      event.preventDefault();
+      finishLoader();
+      return;
+    }
     event.preventDefault();
     stepTo(currentIndex + (event.deltaY > 0 ? 1 : -1));
   },
@@ -160,11 +245,19 @@ window.addEventListener("keydown", (event) => {
 
   if (nextKeys.includes(event.key)) {
     event.preventDefault();
+    if (isLoaderActive()) {
+      finishLoader();
+      return;
+    }
     stepTo(currentIndex + 1);
   }
 
   if (prevKeys.includes(event.key)) {
     event.preventDefault();
+    if (isLoaderActive()) {
+      finishLoader();
+      return;
+    }
     stepTo(currentIndex - 1);
   }
 
@@ -192,6 +285,10 @@ window.addEventListener(
   (event) => {
     const delta = touchStartY - event.changedTouches[0].clientY;
     if (Math.abs(delta) < 42) return;
+    if (isLoaderActive()) {
+      finishLoader();
+      return;
+    }
     stepTo(currentIndex + (delta > 0 ? 1 : -1));
   },
   { passive: true }
