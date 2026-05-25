@@ -3,6 +3,7 @@ const dots = Array.from(document.querySelectorAll(".progress-dot"));
 const pageCount = document.querySelector(".page-count span");
 const timeline = document.querySelector(".timeline span");
 const countNode = document.querySelector(".metric-number");
+const loaderPattern = document.querySelector(".BrandLoader-pattern");
 const loaderClock = document.querySelector("#loader-clock");
 const loaderDate = document.querySelector(".loader-date");
 const loaderTime = document.querySelector(".loader-time");
@@ -27,6 +28,12 @@ const loaderLineDelay = 320;
 const loaderLineDuration = 2200;
 const loaderLineCycleStart = performance.now() + loaderLineDelay;
 let loaderClockTimer = null;
+let loaderPatternTimer = null;
+let loaderPatternPaths = [];
+let loaderPatternTick = 0;
+const loaderPatternWaveInterval = 140;
+const loaderPatternGoldenRatio = 0.618033988749895;
+const loaderPatternTau = Math.PI * 2;
 
 function updateLoaderClock() {
   if (!loaderClock) return;
@@ -52,6 +59,98 @@ updateLoaderClock();
 if (loaderClock) {
   loaderClockTimer = window.setInterval(updateLoaderClock, 1000);
 }
+
+async function mountAnimatedLoaderPattern() {
+  if (!loaderPattern) return;
+
+  try {
+    const response = await fetch("./assets/bork-ginza-pattern-loader.svg");
+    if (!response.ok) return;
+
+    const svgText = await response.text();
+    loaderPattern.innerHTML = svgText;
+    loaderPattern.classList.add("is-inline");
+    loaderPatternPaths = Array.from(loaderPattern.querySelectorAll("path"));
+    loaderPatternTick = 0;
+
+    const patternSvg = loaderPattern.querySelector("svg");
+    const viewBox = patternSvg?.viewBox?.baseVal;
+    const patternWidth = viewBox?.width || 489;
+    const patternHeight = viewBox?.height || 489;
+
+    loaderPatternPaths.forEach((path, index) => {
+      path.dataset.fill = path.getAttribute("fill") || "";
+      path.dataset.opacity = path.getAttribute("opacity") || "1";
+      path.dataset.stroke = path.getAttribute("stroke") || "";
+      path.dataset.strokeWidth = path.getAttribute("stroke-width") || "";
+
+      try {
+        const box = path.getBBox();
+        path.dataset.cx = String((box.x + box.width / 2) / patternWidth);
+        path.dataset.cy = String((box.y + box.height / 2) / patternHeight);
+      } catch (error) {
+        path.dataset.cx = String(((index * loaderPatternGoldenRatio) % 1 + 1) % 1);
+        path.dataset.cy = String((((index + 1) * loaderPatternGoldenRatio * 0.73) % 1 + 1) % 1);
+      }
+
+      path.dataset.phase = String((index * loaderPatternGoldenRatio) % 1);
+      path.style.setProperty("opacity", path.dataset.opacity || "1", "important");
+    });
+
+    const animatePatternWaves = () => {
+      if (!document.body.classList.contains("is-loading") || loaderPatternPaths.length === 0) {
+        if (loaderPatternTimer) window.clearInterval(loaderPatternTimer);
+        return;
+      }
+
+      loaderPatternTick += 1;
+      const time = loaderPatternTick * 0.085;
+      const focusX = 0.5 + Math.sin(time * 0.72) * 0.34;
+      const focusY = 0.5 + Math.cos(time * 0.58) * 0.28;
+
+      loaderPatternPaths.forEach((path, index) => {
+        const x = Number(path.dataset.cx || 0.5);
+        const y = Number(path.dataset.cy || 0.5);
+        const phase = Number(path.dataset.phase || 0);
+        const fill = (path.dataset.fill || "").toLowerCase();
+        const isAccent = fill === "#c6602c";
+        const dx = x - focusX;
+        const dy = y - focusY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const diagonalWave = Math.sin((x * 1.34 + y * 1.92 + phase * 0.65 - time * 0.36) * loaderPatternTau);
+        const radialWave = Math.sin((distance * 4.8 - time * 0.42 + phase) * loaderPatternTau);
+        const columnWave = Math.sin((x * 5.1 - time * 0.18 + phase * 0.38) * loaderPatternTau);
+        const energy = diagonalWave * 0.52 + radialWave * 0.34 + columnWave * 0.14;
+        const low = isAccent ? 0.24 : 0.34;
+        const high = isAccent ? 1 : 1;
+        const normalized = Math.max(0, Math.min(1, (energy + 1) / 2));
+        const shaped = Math.pow(normalized, 0.82);
+        const opacity = low + (high - low) * shaped;
+        const brightness = isAccent ? 0.76 + shaped * 0.62 : 0.82 + shaped * 0.36;
+        const contrast = isAccent ? 1 + shaped * 0.42 : 1 + shaped * 0.18;
+        const saturate = isAccent ? 0.78 + shaped * 0.72 : 0.92 + shaped * 0.16;
+        const glow = isAccent && shaped > 0.52;
+
+        path.style.setProperty("fill", path.dataset.fill, "important");
+        path.style.setProperty("opacity", opacity.toFixed(3), "important");
+        path.style.setProperty(
+          "filter",
+          `${glow ? "drop-shadow(0 0 7px rgba(190, 83, 28, 0.52)) " : ""}brightness(${brightness.toFixed(
+            2
+          )}) contrast(${contrast.toFixed(2)}) saturate(${saturate.toFixed(2)})`,
+          "important"
+        );
+      });
+    };
+
+    animatePatternWaves();
+    loaderPatternTimer = window.setInterval(animatePatternWaves, loaderPatternWaveInterval);
+  } catch (error) {
+    loaderPattern.classList.remove("is-inline");
+  }
+}
+
+mountAnimatedLoaderPattern();
 
 function padPage(value) {
   return String(value + 1).padStart(2, "0");
@@ -201,6 +300,7 @@ function finishLoader() {
             document.body.classList.remove("loader-dismissing");
             loaderTransitioning = false;
             if (loaderClockTimer) window.clearInterval(loaderClockTimer);
+            if (loaderPatternTimer) window.clearInterval(loaderPatternTimer);
 
             window.setTimeout(() => {
               setActive(0);
