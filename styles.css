@@ -1649,7 +1649,7 @@ body.light-ui .timeline {
 
 @media (max-width: 900px) {
   html {
-    scroll-snap-type: y mandatory;
+    scroll-snap-type: y proximity;
   }
 
   .section-content {

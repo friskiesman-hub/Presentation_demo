@@ -22,10 +22,8 @@ let currentIndex = 0;
 let countAnimated = false;
 let wheelLocked = false;
 let touchStartY = 0;
-let touchStartX = 0;
 let loaderDismissed = false;
 let loaderTransitioning = false;
-const isTouchPresentation = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 const loaderLineDelay = 320;
 const loaderLineDuration = 2200;
 const loaderLineCycleStart = performance.now() + loaderLineDelay;
@@ -264,11 +262,6 @@ function setActive(index) {
 function goTo(index) {
   const nextIndex = Math.max(0, Math.min(index, sections.length - 1));
   sections[nextIndex].scrollIntoView({ behavior: "smooth", block: "start" });
-  if (isTouchPresentation) {
-    window.setTimeout(() => {
-      window.scrollTo({ top: sections[nextIndex].offsetTop, behavior: "auto" });
-    }, 760);
-  }
 }
 
 function stepTo(index) {
@@ -446,23 +439,8 @@ window.addEventListener(
   "touchstart",
   (event) => {
     touchStartY = event.touches[0].clientY;
-    touchStartX = event.touches[0].clientX;
   },
   { passive: true }
-);
-
-window.addEventListener(
-  "touchmove",
-  (event) => {
-    if (!isTouchPresentation) return;
-    const touch = event.touches[0];
-    if (!touch) return;
-    const deltaY = touchStartY - touch.clientY;
-    const deltaX = touchStartX - touch.clientX;
-    if (Math.max(Math.abs(deltaY), Math.abs(deltaX)) < 8) return;
-    event.preventDefault();
-  },
-  { passive: false }
 );
 
 window.addEventListener(
