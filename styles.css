@@ -1806,7 +1806,7 @@ body.light-ui .timeline {
   }
 
   .pattern-entrance {
-    --pattern-size: 360px 360px;
+    --pattern-size: 360px;
     right: 92px;
     top: 12vh;
     width: 58vw;
@@ -1814,7 +1814,7 @@ body.light-ui .timeline {
   }
 
   .pattern-revenue {
-    --pattern-size: 320px 320px;
+    --pattern-size: 320px;
     left: -120px;
     bottom: 28vh;
     width: 62vw;
@@ -1822,7 +1822,7 @@ body.light-ui .timeline {
   }
 
   .pattern-category {
-    --pattern-size: 330px 330px;
+    --pattern-size: 330px;
     left: -82px;
     right: auto;
     top: 10vh;
@@ -1831,7 +1831,7 @@ body.light-ui .timeline {
   }
 
   .pattern-efficiency {
-    --pattern-size: 280px 280px;
+    --pattern-size: 280px;
     left: -72px;
     right: auto;
     top: 15vh;
@@ -1840,7 +1840,7 @@ body.light-ui .timeline {
   }
 
   .pattern-final {
-    --pattern-size: 350px 350px;
+    --pattern-size: 350px;
     width: 64vw;
     height: 24vh;
     top: -62px;
@@ -1987,6 +1987,89 @@ body.light-ui .timeline {
 
   .pattern-efficiency {
     display: none;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) and (max-width: 560px) {
+  .hero-title {
+    gap: 0;
+    font-size: clamp(54px, 13.5vw, 64px);
+  }
+
+  .hero-title span:first-child {
+    font-size: inherit;
+  }
+
+  .PremiumButton {
+    width: auto;
+    max-width: 100%;
+    white-space: nowrap;
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+
+  .report-kpis,
+  .focus-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: 28px;
+  }
+
+  .ReportChart {
+    max-height: 50vh;
+  }
+
+  .mini-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .mini-metrics article {
+    border-right: 1px solid rgba(56, 47, 45, 0.12);
+    border-bottom: 0;
+  }
+
+  .mini-metrics article:last-child {
+    border-right: 0;
+  }
+
+  .mini-metrics.dark article {
+    border-right-color: rgba(196, 188, 183, 0.14);
+  }
+
+  .category-grid {
+    grid-template-columns: 0.56fr 1fr;
+  }
+
+  .donut {
+    width: min(240px, 100%);
+  }
+
+  .funnel article {
+    width: var(--w);
+    min-width: 220px;
+  }
+
+  .material-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .MaterialCard {
+    min-height: 172px;
+  }
+
+  .MaterialCard span {
+    margin-bottom: 54px;
+  }
+
+  .PresentationSection.active .pattern-entrance,
+  .PresentationSection.active .pattern-revenue,
+  .PresentationSection.active .pattern-category,
+  .PresentationSection.active .pattern-efficiency,
+  .PresentationSection.active .pattern-final {
+    opacity: 0.2;
+  }
+
+  .pattern-efficiency {
+    display: block;
   }
 }
 
