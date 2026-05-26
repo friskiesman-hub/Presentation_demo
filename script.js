@@ -63,11 +63,7 @@ if (loaderClock) {
 async function mountAnimatedLoaderPattern() {
   if (!loaderPattern) return;
 
-  try {
-    const response = await fetch("./assets/bork-ginza-pattern-loader.svg");
-    if (!response.ok) return;
-
-    const svgText = await response.text();
+  const mountSvg = (svgText) => {
     loaderPattern.innerHTML = svgText;
     loaderPattern.classList.add("is-inline");
     loaderPatternPaths = Array.from(loaderPattern.querySelectorAll("path"));
@@ -96,6 +92,71 @@ async function mountAnimatedLoaderPattern() {
       path.dataset.phase = String((index * loaderPatternGoldenRatio) % 1);
       path.style.setProperty("opacity", path.dataset.opacity || "1", "important");
     });
+  };
+
+  const loadPatternViaFrame = () =>
+    new Promise((resolve, reject) => {
+      const frame = document.createElement("iframe");
+      frame.src = "./assets/bork-ginza-pattern-loader.svg";
+      frame.hidden = true;
+      frame.setAttribute("aria-hidden", "true");
+      frame.style.position = "absolute";
+      frame.style.width = "0";
+      frame.style.height = "0";
+      frame.style.border = "0";
+
+      const cleanup = () => frame.remove();
+
+      frame.addEventListener(
+        "load",
+        () => {
+          try {
+            const svg = frame.contentDocument?.documentElement;
+            if (!svg || svg.tagName.toLowerCase() !== "svg") throw new Error("Pattern frame is empty");
+            resolve(svg.outerHTML);
+          } catch (error) {
+            reject(error);
+          } finally {
+            cleanup();
+          }
+        },
+        { once: true }
+      );
+
+      frame.addEventListener(
+        "error",
+        () => {
+          cleanup();
+          reject(new Error("Pattern frame failed"));
+        },
+        { once: true }
+      );
+
+      document.body.appendChild(frame);
+    });
+
+  try {
+    let svgText = "";
+    const inlinePatternTemplate = document.querySelector("#loader-pattern-template");
+
+    if (inlinePatternTemplate) {
+      svgText = inlinePatternTemplate.innerHTML.trim();
+    }
+
+    if (!svgText) {
+      try {
+        const response = await fetch("./assets/bork-ginza-pattern-loader.svg");
+        if (response.ok) svgText = await response.text();
+      } catch (error) {
+        svgText = "";
+      }
+    }
+
+    if (!svgText) {
+      svgText = await loadPatternViaFrame();
+    }
+
+    mountSvg(svgText);
 
     const animatePatternWaves = () => {
       if (!document.body.classList.contains("is-loading") || loaderPatternPaths.length === 0) {
@@ -147,6 +208,8 @@ async function mountAnimatedLoaderPattern() {
     loaderPatternTimer = window.setInterval(animatePatternWaves, loaderPatternWaveInterval);
   } catch (error) {
     loaderPattern.classList.remove("is-inline");
+    loaderPattern.innerHTML =
+      '<img class="BrandLoader-patternImage" src="./assets/bork-ginza-pattern-loader.svg" alt="" aria-hidden="true" />';
   }
 }
 
