@@ -337,7 +337,6 @@ body.loader-dismissing .BrandLoader-pattern {
 .PresentationLanding {
   position: relative;
   background:
-    linear-gradient(90deg, rgba(196, 188, 183, 0.035) 0 1px, transparent 1px 12.5vw),
     linear-gradient(180deg, var(--color-bg-charcoal), var(--color-bg-graphite) 48%, var(--color-bg-charcoal));
 }
 
@@ -370,17 +369,13 @@ body.loader-dismissing .BrandLoader-pattern {
 .PresentationSection::after {
   bottom: -1px;
   height: 28vh;
-  background:
-    linear-gradient(180deg, transparent, rgba(56, 47, 45, 0.74)),
-    linear-gradient(90deg, transparent, rgba(190, 83, 28, 0.18), transparent);
+  background: linear-gradient(180deg, transparent, rgba(56, 47, 45, 0.74));
   opacity: 0.86;
 }
 
 .PhilosophySection::before,
 .PhilosophySection::after {
-  background:
-    linear-gradient(180deg, rgba(196, 188, 183, 0.92), rgba(196, 188, 183, 0)),
-    linear-gradient(90deg, transparent, rgba(190, 83, 28, 0.08), transparent);
+  background: linear-gradient(180deg, rgba(196, 188, 183, 0.92), rgba(196, 188, 183, 0));
 }
 
 .PhilosophySection::after {
@@ -430,7 +425,7 @@ body.loader-dismissing .BrandLoader-pattern {
 .innovation-photo {
   width: 52%;
   right: auto;
-  opacity: 0.34;
+  opacity: 0.48;
   object-position: 48% center;
 }
 
@@ -473,57 +468,95 @@ body.loader-dismissing .BrandLoader-pattern {
   inset: 0;
   z-index: 2;
   background:
-    linear-gradient(rgba(196, 188, 183, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(196, 188, 183, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(45, 37, 35, 0.94), rgba(56, 47, 45, 0.92) 52%, rgba(45, 37, 35, 0.96));
-  background-size: 72px 72px, 72px 72px, auto;
+    linear-gradient(90deg, rgba(45, 37, 35, 0.82), rgba(56, 47, 45, 0.76) 52%, rgba(45, 37, 35, 0.88));
 }
 
-.SlattedOverlay {
+.PatternAccent {
+  --pattern-safe-right: clamp(112px, 8vw, 164px);
+  --pattern-safe-bottom: 112px;
+  --pattern-size: 420px;
+  --pattern-position: center;
+  --pattern-feather: radial-gradient(ellipse at center, #000 0 46%, rgba(0, 0, 0, 0.82) 58%, rgba(0, 0, 0, 0.28) 76%, transparent 100%);
   position: absolute;
-  inset: 0;
   z-index: 5;
-  opacity: 0.36;
   pointer-events: none;
-  background-image: repeating-linear-gradient(90deg, rgba(196, 188, 183, 0.12) 0, rgba(196, 188, 183, 0.12) 1px, transparent 1px, transparent 18px);
-  mask-image: linear-gradient(90deg, black, transparent 62%);
+  opacity: 0;
+  background: url("./assets/bork-pattern-mono.svg") var(--pattern-position) / var(--pattern-size) var(--pattern-size) no-repeat;
+  contain: paint;
+  -webkit-mask-image: var(--pattern-feather);
+  mask-image: var(--pattern-feather);
+  transition: opacity 900ms var(--ease-cinematic);
 }
 
-.LightLine {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(190, 83, 28, 0.75), rgba(196, 188, 183, 0.45), transparent);
-  box-shadow: 0 0 24px rgba(190, 83, 28, 0.28);
+.PresentationSection.active .PatternAccent {
+  opacity: 0.18;
 }
 
-.entrance-line,
-.philosophy-line,
-.material-line {
-  position: absolute;
-  left: 0;
-  right: 0;
-  z-index: 8;
-  transform: scaleX(0.12);
-  transform-origin: left;
-  opacity: 0.8;
-  transition: transform 1200ms var(--ease-cinematic);
+.pattern-entrance {
+  --pattern-feather: radial-gradient(ellipse at 62% 40%, #000 0 42%, rgba(0, 0, 0, 0.78) 58%, rgba(0, 0, 0, 0.24) 76%, transparent 100%);
+  --pattern-size: 520px;
+  --pattern-position: right top;
+  top: 8vh;
+  right: var(--pattern-safe-right);
+  width: min(34vw, 520px);
+  height: 42vh;
 }
 
-.entrance-line {
-  top: 64%;
+.pattern-revenue {
+  --pattern-feather: radial-gradient(ellipse at 38% 54%, #000 0 40%, rgba(0, 0, 0, 0.76) 56%, rgba(0, 0, 0, 0.22) 76%, transparent 100%);
+  --pattern-size: 410px;
+  --pattern-position: left center;
+  left: clamp(-92px, -5vw, -54px);
+  bottom: 14vh;
+  width: min(32vw, 420px);
+  height: 42vh;
 }
 
-.philosophy-line {
-  top: 38%;
+.pattern-category {
+  --pattern-feather: radial-gradient(ellipse at 42% 42%, #000 0 40%, rgba(0, 0, 0, 0.76) 57%, rgba(0, 0, 0, 0.22) 76%, transparent 100%);
+  --pattern-size: 460px;
+  --pattern-position: left top;
+  left: clamp(-88px, -4vw, -42px);
+  top: 11vh;
+  width: min(31vw, 420px);
+  height: 38vh;
 }
 
-.material-line {
-  top: 73%;
+.pattern-efficiency {
+  --pattern-feather: radial-gradient(ellipse at 40% 50%, #000 0 38%, rgba(0, 0, 0, 0.72) 55%, rgba(0, 0, 0, 0.2) 76%, transparent 100%);
+  --pattern-size: 360px;
+  --pattern-position: left center;
+  left: clamp(-68px, -3vw, -32px);
+  top: 18vh;
+  width: min(28vw, 390px);
+  height: 42vh;
 }
 
-.PresentationSection.active .entrance-line,
-.PresentationSection.active .philosophy-line,
-.PresentationSection.active .material-line {
-  transform: scaleX(1);
+.pattern-final {
+  --pattern-feather: radial-gradient(ellipse at 50% 22%, #000 0 38%, rgba(0, 0, 0, 0.76) 56%, rgba(0, 0, 0, 0.22) 76%, transparent 100%);
+  --pattern-size: 500px;
+  --pattern-position: center top;
+  left: 50%;
+  top: -84px;
+  width: min(42vw, 620px);
+  height: min(34vh, 360px);
+  transform: translateX(-50%);
+}
+
+.BoutiqueExperienceSection.active .pattern-final {
+  opacity: 0.14;
+}
+
+.PhilosophySection.active .pattern-revenue {
+  opacity: 0.16;
+}
+
+.MaterialsSection.active .pattern-category {
+  opacity: 0.16;
+}
+
+.InnovationRecognitionSection.active .pattern-efficiency {
+  opacity: 0.12;
 }
 
 .ArchitecturalTransition {
@@ -531,26 +564,6 @@ body.loader-dismissing .BrandLoader-pattern {
   inset: 0;
   z-index: 6;
   pointer-events: none;
-}
-
-.global-rail {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: linear-gradient(180deg, transparent, rgba(196, 188, 183, 0.18), transparent);
-}
-
-.rail-left {
-  left: 13vw;
-}
-
-.rail-center {
-  left: 50vw;
-}
-
-.rail-right {
-  right: 13vw;
 }
 
 .global-glow {
@@ -783,21 +796,21 @@ body.light-ui .timeline {
     clip-path 1050ms var(--ease-premium);
 }
 
-.PresentationSection.active .MotionTypography {
+.PresentationSection.active .MotionTypography:not(.ReportChart) {
   opacity: 1;
   transform: translateY(0) scale(1);
   clip-path: inset(0 0 0 0);
 }
 
-.PresentationSection.active .MotionTypography:nth-child(2) {
+.PresentationSection.active .MotionTypography:not(.ReportChart):nth-child(2) {
   transition-delay: 120ms;
 }
 
-.PresentationSection.active .MotionTypography:nth-child(3) {
+.PresentationSection.active .MotionTypography:not(.ReportChart):nth-child(3) {
   transition-delay: 220ms;
 }
 
-.PresentationSection.active .MotionTypography:nth-child(4) {
+.PresentationSection.active .MotionTypography:not(.ReportChart):nth-child(4) {
   transition-delay: 320ms;
 }
 
@@ -983,23 +996,6 @@ body.light-ui .timeline {
     repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 8px);
 }
 
-.axis-light {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 47%;
-  z-index: 5;
-  width: 1px;
-  background: linear-gradient(180deg, transparent, rgba(190, 83, 28, 0.8), rgba(196, 188, 183, 0.26), transparent);
-  box-shadow: 0 0 28px rgba(190, 83, 28, 0.26);
-  transform: scaleY(0.16);
-  transition: transform 1200ms var(--ease-cinematic);
-}
-
-.PresentationSection.active .axis-light {
-  transform: scaleY(1);
-}
-
 .innovation-layout {
   display: grid;
   grid-template-columns: 0.95fr 1.05fr;
@@ -1168,6 +1164,24 @@ body.light-ui .timeline {
     background 420ms var(--ease-premium);
 }
 
+.ReportChart.MotionTypography {
+  opacity: 0;
+  transform: translateY(26px) scale(0.985);
+  clip-path: inset(0 0 0 0);
+  transition:
+    opacity 760ms var(--ease-premium),
+    transform 860ms var(--ease-premium),
+    clip-path 0ms linear,
+    border-color 420ms var(--ease-premium),
+    box-shadow 420ms var(--ease-premium),
+    background 420ms var(--ease-premium);
+}
+
+.PresentationSection.active .ReportChart.MotionTypography {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
 .ReportChart:hover {
   transform: translateY(-4px);
   border-color: rgba(190, 83, 28, 0.34);
@@ -1187,6 +1201,37 @@ body.light-ui .timeline {
     linear-gradient(90deg, rgba(56, 47, 45, 0.06) 1px, transparent 1px);
   background-size: 25% 25%;
   pointer-events: none;
+}
+
+.ReportChart .chart-topline,
+.ReportChart .quarter-bars,
+.ReportChart .chart-legend,
+.ReportChart .category-grid,
+.ReportChart .mini-metrics {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 620ms var(--ease-premium),
+    transform 720ms var(--ease-premium);
+}
+
+.PresentationSection.active .ReportChart .chart-topline,
+.PresentationSection.active .ReportChart .quarter-bars,
+.PresentationSection.active .ReportChart .chart-legend,
+.PresentationSection.active .ReportChart .category-grid,
+.PresentationSection.active .ReportChart .mini-metrics {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.PresentationSection.active .ReportChart .quarter-bars,
+.PresentationSection.active .ReportChart .category-grid {
+  transition-delay: 90ms;
+}
+
+.PresentationSection.active .ReportChart .chart-legend,
+.PresentationSection.active .ReportChart .mini-metrics {
+  transition-delay: 150ms;
 }
 
 .category-chart {
@@ -1275,16 +1320,19 @@ body.light-ui .timeline {
   height: var(--bar);
   min-height: 28px;
   border-radius: 4px 4px 0 0;
-  transform: scaleY(0);
+  transform: scaleY(0.08);
   transform-origin: bottom;
+  opacity: 0.44;
   transition:
-    transform 900ms var(--ease-premium) 260ms,
+    opacity 520ms var(--ease-premium) 180ms,
+    transform 820ms var(--ease-premium) 180ms,
     filter 300ms var(--ease-premium),
     box-shadow 300ms var(--ease-premium);
 }
 
-.active .q-month i,
-.active .q-month b {
+.PresentationSection.active .q-month i,
+.PresentationSection.active .q-month b {
+  opacity: 1;
   transform: scaleY(1);
 }
 
@@ -1469,7 +1517,33 @@ body.light-ui .timeline {
   font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  transition: transform 300ms var(--ease-premium), color 300ms var(--ease-premium);
+  opacity: 0;
+  transform: translateX(10px);
+  transition:
+    opacity 520ms var(--ease-premium),
+    transform 620ms var(--ease-premium),
+    color 300ms var(--ease-premium);
+}
+
+.PresentationSection.active .category-list article {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.PresentationSection.active .category-list article:nth-child(2) {
+  transition-delay: 40ms;
+}
+
+.PresentationSection.active .category-list article:nth-child(3) {
+  transition-delay: 80ms;
+}
+
+.PresentationSection.active .category-list article:nth-child(4) {
+  transition-delay: 120ms;
+}
+
+.PresentationSection.active .category-list article:nth-child(5) {
+  transition-delay: 160ms;
 }
 
 .category-list article:hover {
@@ -1494,21 +1568,21 @@ body.light-ui .timeline {
   width: var(--share);
   height: 100%;
   background: linear-gradient(90deg, var(--color-accent-main), rgba(196, 188, 183, 0.52));
-  transform: scaleX(0);
+  transform: scaleX(0.08);
   transform-origin: left;
   transition:
-    transform 900ms var(--ease-premium) 260ms,
+    transform 820ms var(--ease-premium) 160ms,
     filter 300ms var(--ease-premium),
     box-shadow 300ms var(--ease-premium);
+}
+
+.PresentationSection.active .category-list b {
+  transform: scaleX(1);
 }
 
 .category-list article:hover b {
   filter: brightness(1.14);
   box-shadow: 0 0 22px rgba(190, 83, 28, 0.2);
-}
-
-.active .category-list b {
-  transform: scaleX(1);
 }
 
 .funnel {
@@ -1727,8 +1801,49 @@ body.light-ui .timeline {
     font-size: 13px;
   }
 
-  .axis-light {
-    left: 24px;
+  .PresentationSection.active .PatternAccent {
+    opacity: 0.42;
+  }
+
+  .pattern-entrance {
+    --pattern-size: 360px 360px;
+    right: 92px;
+    top: 12vh;
+    width: 58vw;
+    height: 28vh;
+  }
+
+  .pattern-revenue {
+    --pattern-size: 320px 320px;
+    left: -120px;
+    bottom: 28vh;
+    width: 62vw;
+    height: 30vh;
+  }
+
+  .pattern-category {
+    --pattern-size: 330px 330px;
+    left: -82px;
+    right: auto;
+    top: 10vh;
+    width: 56vw;
+    height: 30vh;
+  }
+
+  .pattern-efficiency {
+    --pattern-size: 280px 280px;
+    left: -72px;
+    right: auto;
+    top: 15vh;
+    width: 54vw;
+    height: 28vh;
+  }
+
+  .pattern-final {
+    --pattern-size: 350px 350px;
+    width: 64vw;
+    height: 24vh;
+    top: -62px;
   }
 }
 
@@ -1835,6 +1950,43 @@ body.light-ui .timeline {
   .metric-caption,
   .production-note {
     font-size: 14px;
+  }
+
+  .PresentationSection.active .pattern-entrance,
+  .PresentationSection.active .pattern-revenue,
+  .PresentationSection.active .pattern-category,
+  .PresentationSection.active .pattern-efficiency,
+  .PresentationSection.active .pattern-final {
+    opacity: 0.32;
+  }
+
+  .pattern-entrance,
+  .pattern-category {
+    right: 24px;
+    width: 54vw;
+    height: 28vh;
+  }
+
+  .pattern-category {
+    left: -72px;
+    right: auto;
+  }
+
+  .pattern-revenue {
+    left: -86px;
+    bottom: 30vh;
+    width: 64vw;
+    height: 24vh;
+  }
+
+  .pattern-final {
+    width: 72vw;
+    height: 22vh;
+    top: -54px;
+  }
+
+  .pattern-efficiency {
+    display: none;
   }
 }
 
