@@ -476,16 +476,20 @@ body.loader-dismissing .BrandLoader-pattern {
   --pattern-safe-bottom: 112px;
   --pattern-size: 420px;
   --pattern-position: center;
-  --pattern-feather: radial-gradient(ellipse at center, #000 0 46%, rgba(0, 0, 0, 0.82) 58%, rgba(0, 0, 0, 0.28) 76%, transparent 100%);
+  --pattern-filter: none;
+  --pattern-feather: radial-gradient(ellipse at center, #000 0 28%, rgba(0, 0, 0, 0.66) 48%, rgba(0, 0, 0, 0.18) 72%, transparent 100%);
   position: absolute;
   z-index: 5;
   pointer-events: none;
   opacity: 0;
   background: url("./assets/bork-pattern-mono.svg") var(--pattern-position) / var(--pattern-size) var(--pattern-size) no-repeat;
+  filter: var(--pattern-filter);
   contain: paint;
   -webkit-mask-image: var(--pattern-feather);
   mask-image: var(--pattern-feather);
-  transition: opacity 900ms var(--ease-cinematic);
+  transition:
+    opacity 900ms var(--ease-cinematic),
+    filter 900ms var(--ease-cinematic);
 }
 
 .PresentationSection.active .PatternAccent {
@@ -493,7 +497,7 @@ body.loader-dismissing .BrandLoader-pattern {
 }
 
 .pattern-entrance {
-  --pattern-feather: radial-gradient(ellipse at 62% 40%, #000 0 42%, rgba(0, 0, 0, 0.78) 58%, rgba(0, 0, 0, 0.24) 76%, transparent 100%);
+  --pattern-feather: radial-gradient(ellipse at 62% 40%, #000 0 26%, rgba(0, 0, 0, 0.62) 48%, rgba(0, 0, 0, 0.16) 73%, transparent 100%);
   --pattern-size: 520px;
   --pattern-position: right top;
   top: 8vh;
@@ -503,7 +507,8 @@ body.loader-dismissing .BrandLoader-pattern {
 }
 
 .pattern-revenue {
-  --pattern-feather: radial-gradient(ellipse at 38% 54%, #000 0 40%, rgba(0, 0, 0, 0.76) 56%, rgba(0, 0, 0, 0.22) 76%, transparent 100%);
+  --pattern-filter: brightness(0.56) contrast(1.35) saturate(0.78);
+  --pattern-feather: radial-gradient(ellipse at 38% 54%, #000 0 25%, rgba(0, 0, 0, 0.62) 47%, rgba(0, 0, 0, 0.16) 73%, transparent 100%);
   --pattern-size: 410px;
   --pattern-position: left center;
   left: clamp(-92px, -5vw, -54px);
@@ -513,7 +518,7 @@ body.loader-dismissing .BrandLoader-pattern {
 }
 
 .pattern-category {
-  --pattern-feather: radial-gradient(ellipse at 42% 42%, #000 0 40%, rgba(0, 0, 0, 0.76) 57%, rgba(0, 0, 0, 0.22) 76%, transparent 100%);
+  --pattern-feather: radial-gradient(ellipse at 42% 42%, #000 0 25%, rgba(0, 0, 0, 0.62) 48%, rgba(0, 0, 0, 0.16) 73%, transparent 100%);
   --pattern-size: 460px;
   --pattern-position: left top;
   left: clamp(-88px, -4vw, -42px);
@@ -523,7 +528,7 @@ body.loader-dismissing .BrandLoader-pattern {
 }
 
 .pattern-efficiency {
-  --pattern-feather: radial-gradient(ellipse at 40% 50%, #000 0 38%, rgba(0, 0, 0, 0.72) 55%, rgba(0, 0, 0, 0.2) 76%, transparent 100%);
+  --pattern-feather: radial-gradient(ellipse at 40% 50%, #000 0 24%, rgba(0, 0, 0, 0.58) 46%, rgba(0, 0, 0, 0.14) 72%, transparent 100%);
   --pattern-size: 360px;
   --pattern-position: left center;
   left: clamp(-68px, -3vw, -32px);
@@ -533,7 +538,7 @@ body.loader-dismissing .BrandLoader-pattern {
 }
 
 .pattern-final {
-  --pattern-feather: radial-gradient(ellipse at 50% 22%, #000 0 38%, rgba(0, 0, 0, 0.76) 56%, rgba(0, 0, 0, 0.22) 76%, transparent 100%);
+  --pattern-feather: radial-gradient(ellipse at 50% 22%, #000 0 24%, rgba(0, 0, 0, 0.6) 46%, rgba(0, 0, 0, 0.16) 72%, transparent 100%);
   --pattern-size: 500px;
   --pattern-position: center top;
   left: 50%;
@@ -548,7 +553,7 @@ body.loader-dismissing .BrandLoader-pattern {
 }
 
 .PhilosophySection.active .pattern-revenue {
-  opacity: 0.16;
+  opacity: 0.28;
 }
 
 .MaterialsSection.active .pattern-category {
@@ -1805,6 +1810,10 @@ body.light-ui .timeline {
     opacity: 0.42;
   }
 
+  .PhilosophySection.active .pattern-revenue {
+    opacity: 0.36;
+  }
+
   .pattern-entrance {
     --pattern-size: 360px;
     right: 92px;
@@ -1958,6 +1967,10 @@ body.light-ui .timeline {
   .PresentationSection.active .pattern-efficiency,
   .PresentationSection.active .pattern-final {
     opacity: 0.32;
+  }
+
+  .PhilosophySection.active .pattern-revenue {
+    opacity: 0.34;
   }
 
   .pattern-entrance,
