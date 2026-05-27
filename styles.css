@@ -1924,20 +1924,20 @@ body.light-ui .timeline {
 
   .final-content {
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     padding-top: 38px;
     padding-bottom: 54px;
-    text-align: left;
+    text-align: center;
   }
 
   .final-content .lead,
   .final-content .PremiumButton {
-    margin-left: 0;
-    margin-right: 0;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .final-content .PremiumButton {
-    align-self: flex-start;
+    align-self: center;
   }
 
   .PresentationSection.active .PatternAccent {
