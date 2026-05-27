@@ -31,9 +31,28 @@ let loaderClockTimer = null;
 let loaderPatternTimer = null;
 let loaderPatternPaths = [];
 let loaderPatternTick = 0;
+let viewportSyncTimer = null;
 const loaderPatternWaveInterval = 140;
 const loaderPatternGoldenRatio = 0.618033988749895;
 const loaderPatternTau = Math.PI * 2;
+
+function getViewportHeight() {
+  return Math.round(window.visualViewport?.height || window.innerHeight);
+}
+
+function syncViewportHeight(shouldRealign = false) {
+  const viewportHeight = getViewportHeight();
+  document.documentElement.style.setProperty("--app-height", `${viewportHeight}px`);
+
+  if (!shouldRealign || document.body.classList.contains("is-loading")) return;
+
+  window.clearTimeout(viewportSyncTimer);
+  viewportSyncTimer = window.setTimeout(() => {
+    sections[currentIndex]?.scrollIntoView({ behavior: "auto", block: "start" });
+  }, 90);
+}
+
+syncViewportHeight();
 
 function updateLoaderClock() {
   if (!loaderClock) return;
@@ -466,9 +485,15 @@ window.addEventListener(
   { passive: true }
 );
 
+window.addEventListener("resize", () => syncViewportHeight(true), { passive: true });
+window.addEventListener("orientationchange", () => syncViewportHeight(true), { passive: true });
+window.visualViewport?.addEventListener("resize", () => syncViewportHeight(true), { passive: true });
+window.visualViewport?.addEventListener("scroll", () => syncViewportHeight(false), { passive: true });
+
 setActive(0);
 
 window.addEventListener("load", () => {
+  syncViewportHeight(true);
   if (!window.location.hash) {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }

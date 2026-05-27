@@ -34,6 +34,7 @@
   --ease-loader: cubic-bezier(0.42, 0, 0.18, 1);
   --font-body: "Avenir Next", "Helvetica Neue", Arial, sans-serif;
   --font-body-medium: "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+  --app-height: 100svh;
 }
 
 * {
@@ -78,6 +79,7 @@ button {
 .BrandLoader {
   position: fixed;
   inset: 0;
+  height: var(--app-height);
   z-index: 100;
   display: grid;
   place-items: center;
@@ -342,8 +344,10 @@ body.loader-dismissing .BrandLoader-pattern {
 
 .PresentationSection {
   position: relative;
+  height: var(--app-height);
   min-height: 100vh;
   min-height: 100svh;
+  min-height: var(--app-height);
   overflow: hidden;
   isolation: isolate;
   scroll-snap-align: start;
@@ -388,6 +392,7 @@ body.loader-dismissing .BrandLoader-pattern {
   width: min(1180px, calc(100vw - 96px));
   min-height: 100vh;
   min-height: 100svh;
+  min-height: var(--app-height);
   margin: 0 auto;
 }
 
@@ -1653,14 +1658,18 @@ body.light-ui .timeline {
 }
 
 @media (orientation: landscape) and (max-height: 760px) and (max-width: 1500px) {
+  .BrandLoader-pattern {
+    width: min(30vw, calc(var(--app-height) * 0.62), 300px);
+  }
+
   .PresentationSection {
-    height: 100svh;
-    min-height: 100svh;
+    height: var(--app-height);
+    min-height: var(--app-height);
   }
 
   .section-content {
     width: min(100% - 72px, 1120px);
-    min-height: 100svh;
+    min-height: var(--app-height);
   }
 
   .brand-mark {
@@ -1763,7 +1772,7 @@ body.light-ui .timeline {
   .philosophy-layout,
   .materials-layout,
   .innovation-layout {
-    min-height: 100svh;
+    min-height: var(--app-height);
     padding-top: 42px;
     padding-bottom: 50px;
     gap: 4vw;
@@ -1786,7 +1795,7 @@ body.light-ui .timeline {
   }
 
   .ReportChart {
-    max-height: calc(100svh - 92px);
+    max-height: calc(var(--app-height) - 92px);
   }
 
   .chart-topline {
