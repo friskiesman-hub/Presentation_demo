@@ -1654,6 +1654,7 @@ body.light-ui .timeline {
 
 @media (orientation: landscape) and (max-height: 760px) and (max-width: 1500px) {
   .PresentationSection {
+    height: 100svh;
     min-height: 100svh;
   }
 
@@ -1732,6 +1733,10 @@ body.light-ui .timeline {
     font-size: 10px;
   }
 
+  .hero-content .PremiumButton {
+    display: none;
+  }
+
   .report-kpis,
   .focus-grid {
     width: min(640px, 72vw);
@@ -1807,7 +1812,18 @@ body.light-ui .timeline {
     height: 90px;
   }
 
+  .q-month span {
+    top: 8px;
+    font-size: 10px;
+  }
+
+  .q-month em {
+    bottom: -18px;
+    font-size: 10px;
+  }
+
   .chart-legend {
+    display: none;
     padding: 0 18px 10px;
     font-size: 9px;
   }
