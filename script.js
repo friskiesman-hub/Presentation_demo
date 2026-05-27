@@ -8,14 +8,6 @@ const loaderClock = document.querySelector("#loader-clock");
 const loaderDate = document.querySelector(".loader-date");
 const loaderTime = document.querySelector(".loader-time");
 const cascadeTextNodes = Array.from(document.querySelectorAll(".hero-title span:first-child, .section-title"));
-const viewportDebugNodes = {
-  inner: document.querySelector('[data-debug="inner"]'),
-  client: document.querySelector('[data-debug="client"]'),
-  visual: document.querySelector('[data-debug="visual"]'),
-  scale: document.querySelector('[data-debug="scale"]'),
-  breakpoint: document.querySelector('[data-debug="breakpoint"]'),
-  dpr: document.querySelector('[data-debug="dpr"]'),
-};
 
 if ("scrollRestoration" in window.history) {
   window.history.scrollRestoration = "manual";
@@ -25,42 +17,6 @@ if (!window.location.hash) {
   window.scrollTo(0, 0);
   requestAnimationFrame(() => window.scrollTo(0, 0));
 }
-
-function formatNumber(value) {
-  return Number.isFinite(value) ? String(Math.round(value * 100) / 100) : "--";
-}
-
-function getBreakpointLabel(width) {
-  if (width <= 560) return "<=560";
-  if (width <= 900) return "561-900";
-  return ">900";
-}
-
-function updateViewportDebug() {
-  if (!viewportDebugNodes.inner) return;
-
-  const visualViewport = window.visualViewport;
-  const innerWidth = window.innerWidth;
-  const innerHeight = window.innerHeight;
-  const clientWidth = document.documentElement.clientWidth;
-  const clientHeight = document.documentElement.clientHeight;
-  const visualWidth = visualViewport?.width;
-  const visualHeight = visualViewport?.height;
-  const effectiveWidth = visualWidth || innerWidth;
-
-  viewportDebugNodes.inner.textContent = `${formatNumber(innerWidth)}x${formatNumber(innerHeight)}`;
-  viewportDebugNodes.client.textContent = `${formatNumber(clientWidth)}x${formatNumber(clientHeight)}`;
-  viewportDebugNodes.visual.textContent = `${formatNumber(visualWidth)}x${formatNumber(visualHeight)}`;
-  viewportDebugNodes.scale.textContent = formatNumber(visualViewport?.scale || 1);
-  viewportDebugNodes.breakpoint.textContent = getBreakpointLabel(effectiveWidth);
-  viewportDebugNodes.dpr.textContent = formatNumber(window.devicePixelRatio || 1);
-}
-
-updateViewportDebug();
-window.addEventListener("resize", updateViewportDebug, { passive: true });
-window.addEventListener("orientationchange", () => window.setTimeout(updateViewportDebug, 250), { passive: true });
-window.visualViewport?.addEventListener("resize", updateViewportDebug, { passive: true });
-window.visualViewport?.addEventListener("scroll", updateViewportDebug, { passive: true });
 
 let currentIndex = 0;
 let countAnimated = false;
