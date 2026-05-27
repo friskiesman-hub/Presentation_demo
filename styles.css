@@ -1743,7 +1743,11 @@ body.light-ui .timeline {
   }
 
   .hero-content .PremiumButton {
-    display: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 12px;
+    padding: 9px 20px;
   }
 
   .report-kpis,
