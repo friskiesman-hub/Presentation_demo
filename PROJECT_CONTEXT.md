@@ -95,18 +95,10 @@ Presentation_demo/
 ├── styles.css
 ├── script.js
 ├── assets/
-│   ├── bork-boutique-entrance-web.png
 │   ├── bork-boutique-entrance.jpg
-│   ├── bork-boutique-entrance.png
-│   ├── bork-boutique-final-web.png
 │   ├── bork-boutique-final.jpg
-│   ├── bork-boutique-final.png
-│   ├── bork-boutique-gallery-web.png
 │   ├── bork-boutique-gallery.jpg
-│   ├── bork-boutique-gallery.png
-│   ├── bork-boutique-materials-web.png
 │   ├── bork-boutique-materials.jpg
-│   ├── bork-boutique-materials.png
 │   ├── bork-ginza-pattern-loader.svg
 │   └── bork-pattern-mono.svg
 ├── PROJECT_CONTEXT.md
