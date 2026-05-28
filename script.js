@@ -19,7 +19,39 @@ if (!window.location.hash) {
 }
 
 let currentIndex = 0;
-let countAnimated = false;
+let journeyConstellationReady = false;
+let journeyPinnedNode = null;
+
+const journeyDetail = document.querySelector("#journey-detail");
+const journeyDetailLabel = journeyDetail?.querySelector(".journey-detail-label");
+const journeyDetailText = journeyDetail?.querySelector(".journey-detail-text");
+const journeyHubValue = document.querySelector(".journey-hub-value");
+const journeyConstellation = document.querySelector(".JourneyConstellation");
+const journeyNodes = Array.from(document.querySelectorAll(".journey-node"));
+const journeyLines = Array.from(document.querySelectorAll(".journey-line"));
+
+const journeyNodeCopy = {
+  0: {
+    label: "Discovery",
+    text: "62% сессий доходят до deep view карточки: контентные подборки Q2 сократили путь к премиальным SKU на 18%.",
+  },
+  1: {
+    label: "Consult",
+    text: "48% заказов сопровождались персональной консультацией: live-chat и callback дали +12% к среднему чеку в июне.",
+  },
+  2: {
+    label: "Bundle",
+    text: "37% покупок — комплекты «основной продукт + аксессуар»: сценарии cross-sell усилили маржу категории Кухня.",
+  },
+  3: {
+    label: "Service",
+    text: "71% клиентов оценили сервис доставки на 9–10: SLA same-day в Москве удержал NPS на уровне 74.",
+  },
+  4: {
+    label: "Repeat",
+    text: "39% клиентов вернулись в течение 45 дней: CRM-цепочки Q2 подготовили базу для цели repeat 45% в Q3.",
+  },
+};
 let wheelLocked = false;
 let touchStartY = 0;
 let loaderDismissed = false;
@@ -238,22 +270,99 @@ function padPage(value) {
   return String(value + 1).padStart(2, "0");
 }
 
-function animateMetric() {
-  if (countAnimated || !countNode) return;
-  countAnimated = true;
+function animateCounter(node, hasAnimatedRef, duration = 1300) {
+  if (!node || hasAnimatedRef.done) return;
+  hasAnimatedRef.done = true;
 
-  const target = Number(countNode.dataset.count || 60);
+  const target = Number(node.dataset.count || 0);
   const start = performance.now();
-  const duration = 1300;
 
   function tick(now) {
     const progress = Math.min((now - start) / duration, 1);
     const eased = 1 - Math.pow(1 - progress, 4);
-    countNode.textContent = Math.round(target * eased);
+    node.textContent = Math.round(target * eased);
     if (progress < 1) requestAnimationFrame(tick);
   }
 
   requestAnimationFrame(tick);
+}
+
+const countAnimatedRef = { done: false };
+const journeyHubAnimatedRef = { done: false };
+
+function animateMetric() {
+  animateCounter(countNode, countAnimatedRef);
+}
+
+function animateJourneyHub() {
+  animateCounter(journeyHubValue, journeyHubAnimatedRef, 1200);
+}
+
+function setJourneyNode(nodeId) {
+  if (!journeyNodes.length) return;
+
+  const resolvedId = nodeId === null ? null : String(nodeId);
+  journeyNodes.forEach((node) => {
+    const isActive = resolvedId !== null && node.dataset.node === resolvedId;
+    node.classList.toggle("is-active", isActive);
+    node.setAttribute("aria-pressed", isActive ? "true" : "false");
+  });
+
+  journeyLines.forEach((line) => {
+    line.classList.toggle("is-active", resolvedId !== null && line.dataset.line === resolvedId);
+  });
+
+  journeyConstellation?.classList.toggle("is-interactive", resolvedId !== null);
+
+  if (!journeyDetail || !journeyDetailLabel || !journeyDetailText) return;
+
+  if (resolvedId === null) {
+    journeyDetailLabel.textContent = "Обзор";
+    journeyDetailText.textContent =
+      "Наведите или выберите узел созвездия, чтобы увидеть вклад этапа в индекс готовности Q3.";
+    return;
+  }
+
+  const copy = journeyNodeCopy[resolvedId];
+  if (!copy) return;
+
+  journeyDetailLabel.textContent = copy.label;
+  journeyDetailText.textContent = copy.text;
+  journeyDetail.classList.remove("is-updated");
+  void journeyDetail.offsetWidth;
+  journeyDetail.classList.add("is-updated");
+}
+
+function initJourneyConstellation() {
+  if (journeyConstellationReady || !journeyNodes.length) return;
+  journeyConstellationReady = true;
+
+  journeyNodes.forEach((node) => {
+    node.addEventListener("mouseenter", () => {
+      if (journeyPinnedNode === null) setJourneyNode(node.dataset.node);
+    });
+
+    node.addEventListener("focus", () => setJourneyNode(node.dataset.node));
+
+    node.addEventListener("mouseleave", () => {
+      if (journeyPinnedNode === null) setJourneyNode(null);
+    });
+
+    node.addEventListener("click", () => {
+      const nodeId = node.dataset.node;
+      if (journeyPinnedNode === nodeId) {
+        journeyPinnedNode = null;
+        setJourneyNode(null);
+        return;
+      }
+      journeyPinnedNode = nodeId;
+      setJourneyNode(nodeId);
+    });
+  });
+
+  journeyConstellation?.addEventListener("mouseleave", () => {
+    if (journeyPinnedNode === null) setJourneyNode(null);
+  });
 }
 
 function setActive(index) {
@@ -275,6 +384,16 @@ function setActive(index) {
 
   if (index === 3) {
     window.setTimeout(animateMetric, 260);
+  }
+
+  if (index === 4) {
+    initJourneyConstellation();
+    window.setTimeout(animateJourneyHub, 280);
+  }
+
+  if (index !== 4 && journeyPinnedNode !== null) {
+    journeyPinnedNode = null;
+    setJourneyNode(null);
   }
 }
 
@@ -352,6 +471,7 @@ const observer = new IntersectionObserver(
 
 sections.forEach((section) => observer.observe(section));
 mountTextCascade();
+initJourneyConstellation();
 
 function finishLoader() {
   if (loaderDismissed || loaderTransitioning || !document.body.classList.contains("is-loading")) return;

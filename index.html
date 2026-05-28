@@ -31,9 +31,10 @@
       <button class="progress-dot" type="button" data-target="2" aria-label="Перейти к странице 3"></button>
       <button class="progress-dot" type="button" data-target="3" aria-label="Перейти к странице 4"></button>
       <button class="progress-dot" type="button" data-target="4" aria-label="Перейти к странице 5"></button>
+      <button class="progress-dot" type="button" data-target="5" aria-label="Перейти к странице 6"></button>
     </nav>
 
-    <div class="page-count" aria-live="polite"><span>01</span> / 05</div>
+    <div class="page-count" aria-live="polite"><span>01</span> / 06</div>
     <div class="timeline" aria-hidden="true"><span></span></div>
 
     <div class="ArchitecturalTransition" aria-hidden="true">
@@ -212,7 +213,131 @@
         </div>
       </section>
 
-      <section class="PresentationSection BoutiqueExperienceSection" data-index="4">
+      <section class="PresentationSection ClientJourneySection" data-index="4">
+        <img
+          class="section-photo journey-photo image-bork"
+          src="./assets/bork-boutique-materials.jpg"
+          alt=""
+          aria-hidden="true"
+        />
+        <div class="journey-wash" aria-hidden="true"></div>
+        <div class="PatternAccent pattern-journey" aria-hidden="true"></div>
+
+        <div class="section-content journey-layout">
+          <div class="journey-copy">
+            <p class="eyebrow MotionTypography">05 / Q3 Bridge</p>
+            <h2 class="section-title MotionTypography">Созвездие премиального пути</h2>
+            <p class="lead muted MotionTypography">
+              Пять связанных touchpoints Q2 формируют мост к Q3: чем сильнее сцепление сценариев, тем выше готовность к масштабированию персонализации.
+            </p>
+            <aside
+              class="journey-detail MotionTypography"
+              id="journey-detail"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              <span class="journey-detail-label">Обзор</span>
+              <p class="journey-detail-text">
+                Наведите или выберите узел созвездия, чтобы увидеть вклад этапа в индекс готовности Q3.
+              </p>
+            </aside>
+          </div>
+
+          <div
+            class="JourneyConstellation ReportChart MotionTypography"
+            role="group"
+            aria-label="Созвездие touchpoints Интернет Бутика Q2 — мост в Q3"
+          >
+            <div class="journey-chart-topline">
+              <span>Индекс сцепления сценариев</span>
+              <strong>Q2 → Q3</strong>
+            </div>
+            <div class="journey-stage">
+              <svg class="journey-lines" viewBox="0 0 400 400" aria-hidden="true">
+                <circle class="journey-orbit" cx="200" cy="200" r="128" />
+                <line class="journey-line" data-line="0" x1="200" y1="200" x2="200" y2="58" />
+                <line class="journey-line" data-line="1" x1="200" y1="200" x2="332" y2="148" />
+                <line class="journey-line" data-line="2" x1="200" y1="200" x2="286" y2="332" />
+                <line class="journey-line" data-line="3" x1="200" y1="200" x2="114" y2="332" />
+                <line class="journey-line" data-line="4" x1="200" y1="200" x2="68" y2="148" />
+              </svg>
+
+              <div class="journey-hub" aria-hidden="true">
+                <span class="journey-hub-value" data-count="84">0</span>
+                <span class="journey-hub-caption">готовность Q3</span>
+              </div>
+
+              <button
+                class="journey-node"
+                type="button"
+                data-node="0"
+                data-line="0"
+                style="--x: 50%; --y: 14%"
+                aria-pressed="false"
+              >
+                <span class="journey-node-ring" aria-hidden="true"></span>
+                <strong>62%</strong>
+                <em>Discovery</em>
+              </button>
+              <button
+                class="journey-node"
+                type="button"
+                data-node="1"
+                data-line="1"
+                style="--x: 83%; --y: 37%"
+                aria-pressed="false"
+              >
+                <span class="journey-node-ring" aria-hidden="true"></span>
+                <strong>48%</strong>
+                <em>Consult</em>
+              </button>
+              <button
+                class="journey-node"
+                type="button"
+                data-node="2"
+                data-line="2"
+                style="--x: 71%; --y: 83%"
+                aria-pressed="false"
+              >
+                <span class="journey-node-ring" aria-hidden="true"></span>
+                <strong>37%</strong>
+                <em>Bundle</em>
+              </button>
+              <button
+                class="journey-node"
+                type="button"
+                data-node="3"
+                data-line="3"
+                style="--x: 29%; --y: 83%"
+                aria-pressed="false"
+              >
+                <span class="journey-node-ring" aria-hidden="true"></span>
+                <strong>71%</strong>
+                <em>Service</em>
+              </button>
+              <button
+                class="journey-node"
+                type="button"
+                data-node="4"
+                data-line="4"
+                style="--x: 17%; --y: 37%"
+                aria-pressed="false"
+              >
+                <span class="journey-node-ring" aria-hidden="true"></span>
+                <strong>39%</strong>
+                <em>Repeat</em>
+              </button>
+            </div>
+
+            <div class="journey-legend" aria-hidden="true">
+              <span><i></i> активный touchpoint</span>
+              <span><b></b> индекс готовности</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="PresentationSection BoutiqueExperienceSection" data-index="5">
         <img
           class="section-photo final-photo image-bork"
           src="./assets/bork-boutique-final.jpg"
@@ -223,7 +348,7 @@
         <div class="PatternAccent pattern-final" aria-hidden="true"></div>
 
         <div class="section-content final-content report-final">
-          <p class="eyebrow MotionTypography">05 / Q3 Focus</p>
+          <p class="eyebrow MotionTypography">06 / Q3 Focus</p>
           <h2 class="section-title MotionTypography">Q2 подтвердил потенциал Интернет Бутика</h2>
           <p class="lead MotionTypography">
             Следующий шаг — масштабировать персональные сценарии, удержать качество сервиса и усилить премиальные комплекты.
